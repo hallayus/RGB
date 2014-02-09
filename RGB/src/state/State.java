@@ -1,9 +1,9 @@
 package state;
 
 
+import player.InputController;
 import graphics.GraphicsController;
 import main.Command;
-import controller.InputController;
 
 public interface State {
 

@@ -6,7 +6,7 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 
-import controller.InputController;
+import player.InputController;
 import state.Frame;
 import state.MainMenu;
 import state.State;
@@ -18,7 +18,9 @@ public class Application{
 	private static int width = 1280;
 	private static int height = 720;
 
+
 	public Application(){
+		
 		initDisplay();
 		currState = new Frame("slides/Splash", 2000, new MainMenu());
 		GraphicsController gc = new GraphicsController();
@@ -36,8 +38,10 @@ public class Application{
 			Display.sync(60);
 		}
 		
-		System.out.println("closing game");
+		Logger.write("closing application", this.getClass());
 		close();
+		
+		
 	}
 	
 	public static void main(String[] args){

@@ -2,7 +2,6 @@ package player;
 
 import graphics.Sprite;
 import math.Vector2;
-import controller.InputController;
 import world.GameObject;
 
 public class Player extends GameObject {

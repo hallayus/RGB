@@ -9,6 +9,8 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 
+import main.Logger;
+
 public class NetConnection implements Runnable {
 	private boolean open = true;
 	private ArrayList<NetListener> listeners;
@@ -33,7 +35,7 @@ public class NetConnection implements Runnable {
 				
 				updateListeners(data);
 			} catch (IOException e) {
-				e.printStackTrace();
+				Logger.write(e.getMessage(), this.getClass());
 				return;
 			}	
 			
@@ -53,7 +55,7 @@ public class NetConnection implements Runnable {
 		} 
 		catch (SocketException e) 
 		{
-			e.printStackTrace();
+			Logger.write(e.getMessage(), this.getClass());
 		} 
 		catch (UnknownHostException e2) 
 		{

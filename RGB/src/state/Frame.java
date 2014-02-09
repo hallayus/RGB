@@ -1,10 +1,10 @@
 package state;
 
+import player.InputController;
 import graphics.GraphicsController;
 import graphics.Sprite;
 import main.Application;
 import main.Command;
-import controller.InputController;
 
 public class Frame implements State {
 	private Sprite sprite;

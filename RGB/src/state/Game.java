@@ -7,15 +7,11 @@ import java.net.*;
 import java.util.ArrayList;
 
 import net.NetConnection;
-
+import player.InputController;
 import player.Player;
-
-
 import world.GameObject;
-
 import libs.LevelLibrary;
 import main.Command;
-import controller.InputController;
 
 
 public class Game implements State {

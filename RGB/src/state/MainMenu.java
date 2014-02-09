@@ -5,12 +5,11 @@ import graphics.GraphicsController;
 import java.io.IOException;
 import java.net.*;
 
+import player.InputController;
 import net.NetConnection;
 import net.NetworkManager;
-
 import main.Application;
 import main.Command;
-import controller.InputController;
 
 public class MainMenu implements State {
 	

@@ -3,6 +3,8 @@ package graphics;
 import java.io.IOException;
 import java.io.InputStream;
 
+import main.Logger;
+
 import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureLoader;
 
@@ -15,7 +17,7 @@ public class Sprite {
 		try {
 			InputStream in = org.newdawn.slick.util.ResourceLoader.getResourceAsStream("res/" + name + ".png");
 			texture = TextureLoader.getTexture("PNG", in);
-			System.out.println("Sprite with " + name + " has dimensions: " + texture.getHeight() + ", " + texture.getWidth());
+			Logger.write("Sprite " + name + " has dimensions: " + texture.getHeight() + ", " + texture.getWidth(),this.getClass());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
