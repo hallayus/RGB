@@ -6,8 +6,8 @@ port of the original GGJ2014 game
 
 Features:
 
-Configurable Logger  
-  gui items and infrastructure  
++ Configurable Logger  
++ gui items and infrastructure  
   better graphics  
   graph structure for game objects  
   camera  
