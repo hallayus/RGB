@@ -1,6 +1,7 @@
 package player;
 
 import graphics.Sprite;
+import main.InputController;
 import math.Vector2;
 import world.GameObject;
 

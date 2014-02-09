@@ -7,17 +7,17 @@ import java.net.*;
 import java.util.ArrayList;
 
 import net.NetConnection;
-import player.InputController;
+import net.NetworkManager;
 import player.Player;
 import world.GameObject;
 import libs.LevelLibrary;
 import main.Command;
+import main.InputController;
 
 
 public class Game implements State {
-	private NetConnection nc;
+	private NetworkManager networkManager;
 	
-	private ArrayList<Object> assets;
 	private GameObject[][] world;
 	private Player player;
 	
@@ -27,9 +27,7 @@ public class Game implements State {
 		for(int i = 0;i < world.length;i++){
 			for(int j = 0;j < world[i].length;j++){
 				GameObject go = world[i][j];
-				if(go != null){
-					
-					//System.out.println(world[i][j].getSprite());
+				if(go != null){					
 					gc.render((int)go.getX(),(int) go.getY(), world[i][j].getSprite());
 				}
 			}
@@ -47,16 +45,19 @@ public class Game implements State {
 		player.getInput(ic);
 	}
 	
-	public Game(NetConnection nc){
-		this.nc = nc;
-		assets = new ArrayList<Object>();
+	public Game(NetworkManager networkManager){
+		this.networkManager = networkManager;
 		LevelLibrary.init();
 		world = LevelLibrary.load("levels/level1");
-		player = new Player(0,0,world);
+		player = new Player(640,320,world);
 	}
 	
 	public void close(){
-		nc.close();
+		networkManager.close();
+	}
+	
+	public void start(){
+		
 	}
 
 }

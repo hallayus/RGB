@@ -2,11 +2,11 @@ package main;
 import graphics.GraphicsController;
 
 import org.lwjgl.LWJGLException;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 
-import player.InputController;
 import state.Frame;
 import state.MainMenu;
 import state.State;
@@ -21,10 +21,12 @@ public class Application{
 
 	public Application(){
 		
-		initDisplay();
-		currState = new Frame("slides/Splash", 2000, new MainMenu());
+		start();
 		GraphicsController gc = new GraphicsController();
 		InputController ic = new InputController();
+		
+		currState = new Frame("slides/Splash", 2000, new MainMenu());
+		currState.start();
 		
 		while(!Display.isCloseRequested()){
 			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
@@ -38,7 +40,7 @@ public class Application{
 			Display.sync(60);
 		}
 		
-		Logger.write("closing application", this.getClass());
+		Logger.writeMessage("closing application", this.getClass());
 		close();
 		
 		
@@ -54,16 +56,19 @@ public class Application{
 	
 	public static void close(){
 		Display.destroy();
+		Keyboard.destroy();
 		currState.close();
 	}
 	
-	private static void initDisplay(){
+	private static void start(){
 		
 		try {
 			Display.setDisplayMode(new DisplayMode(width,height));
 			Display.create();
+			Keyboard.create();
+
 		} catch (LWJGLException e) {
-			e.printStackTrace();
+			Logger.writeException(e, Application.class);
 			System.exit(0);
 		}
 		

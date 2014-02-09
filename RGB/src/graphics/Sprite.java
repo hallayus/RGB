@@ -17,7 +17,7 @@ public class Sprite {
 		try {
 			InputStream in = org.newdawn.slick.util.ResourceLoader.getResourceAsStream("res/" + name + ".png");
 			texture = TextureLoader.getTexture("PNG", in);
-			Logger.write("Sprite " + name + " has dimensions: " + texture.getHeight() + ", " + texture.getWidth(),this.getClass());
+			Logger.writeMessage("Sprite " + name + " has dimensions: " + texture.getHeight() + ", " + texture.getWidth(),this.getClass());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -45,4 +45,16 @@ public class Sprite {
 	
 	public int getX(){ return x; }
 	public int getY(){ return y; }
+	
+	public int getWidth(){
+		if(texture != null)
+			return texture.getImageWidth();
+		return 0;
+	}
+	
+	public int getHeight(){
+		if(texture != null)
+			return texture.getImageHeight();
+		return 0;
+	}
 }

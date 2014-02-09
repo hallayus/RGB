@@ -3,6 +3,7 @@ package player;
 import java.awt.Rectangle;
 
 import world.GameObject;
+import main.Logger;
 import math.Vector2;
 
 public class PlayerPhysicsComponent {
@@ -75,7 +76,7 @@ public class PlayerPhysicsComponent {
 	public void jump(float impulse){
 
 		if(grounded){
-			//System.out.println("jumping");
+			Logger.writeMessage("player jumped", this.getClass());
 			vy = impulse;
 			grounded = false;
 		}

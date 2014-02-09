@@ -1,6 +1,18 @@
 package net;
 
-public class NetworkManager implements NetListener{
+import gui.GuiListener;
+import main.Logger;
+
+/*
+ * Some notes on this class: 
+ * 	RGB used UDP composed of byte arrays.
+ *  the first byte of this array always denotes the type of message. The finals below indicate what packet types are expected
+ *  the second byte of this array is the players unique key, which is a signed byte not equal to 0.
+ *  the rest of the message is a byte representation of a CSV file containing name value pairs. 
+ *  this while be redone soon, but I wanted some working networking to continue with gameplay
+ */
+
+public class NetworkManager implements NetListener, GuiListener{
 	private static final int INIT_KEY = 76;
 	private static final int GAME_KEY = 98;
 	private static final int CHAT_KEY = 109;
@@ -19,13 +31,12 @@ public class NetworkManager implements NetListener{
 			
 			personalId = data[1];
 			state = NetworkState.CONNECTED;
-			System.out.println(personalId);
-			
+			Logger.writeMessage("Received personal ID of: " + personalId, this.getClass());
 			break;
 		case PING_KEY:
 			if(personalId == data[1]){
 				state = NetworkState.CONNECTED;
-				System.out.println("Testing successful");
+				Logger.writeMessage("received ping back from server", this.getClass());
 			}
 			break;
 		default:
@@ -35,12 +46,14 @@ public class NetworkManager implements NetListener{
 
 	public void start(){
 		if(netConn != null){
-			System.out.println("initialising connection");
+			Logger.writeMessage("connecting to server...", this.getClass());
+			netConn.start();
+			
 			byte[] data = {INIT_KEY,0};
 			netConn.send(data);
 			state = NetworkState.WAITING;
 		}else{
-			System.out.println("network connection not yet initialised");
+			Logger.writeMessage("NetConnection not yet initialised", this.getClass());
 		}
 	}
 	
@@ -59,6 +72,11 @@ public class NetworkManager implements NetListener{
 	
 	public void close(){
 		netConn.close();
+	}
+
+	@Override
+	public void guiRespond() {
+		start();
 	}
 	
 }

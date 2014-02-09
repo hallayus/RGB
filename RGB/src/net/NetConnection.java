@@ -15,11 +15,13 @@ public class NetConnection implements Runnable {
 	private boolean open = true;
 	private ArrayList<NetListener> listeners;
 	
+	private static final String REMOTE_ADDR = "localhost";
+	private static final int REMOTE_PORT = 8765;
+	
 	private DatagramSocket ds;
 	private DatagramPacket dp;
 	private byte[] data;
 	
-	private static final int remotePort = 8765;
 	private static InetAddress ia;
 	
 	public void run() {
@@ -29,16 +31,14 @@ public class NetConnection implements Runnable {
 		
 		while(open){	
 			try {
-				//the server sends a packet whose first byte contains the number of player that connected.
 				ds.receive(dp);
 				data = dp.getData();
 				
 				updateListeners(data);
 			} catch (IOException e) {
-				Logger.write(e.getMessage(), this.getClass());
+				Logger.writeException(e, this.getClass());
 				return;
 			}	
-			
 		}	
 		
 	}
@@ -46,38 +46,46 @@ public class NetConnection implements Runnable {
 	public NetConnection(){
 		
 		listeners = new ArrayList<NetListener>();
-		try 
-		{
-			ia = InetAddress.getByName("localhost");
+		try {
 			ds = new DatagramSocket();
-			ds.connect(new InetSocketAddress(ia,remotePort));
-			
-		} 
-		catch (SocketException e) 
-		{
-			Logger.write(e.getMessage(), this.getClass());
-		} 
-		catch (UnknownHostException e2) 
-		{
-			e2.printStackTrace();
-			System.out.println("could not find server");
-			return;
+		} catch (SocketException e) {
+			Logger.writeException(e, this.getClass());
 		}
 		
-		Thread t = new Thread(this);
-		t.start();
 	}
 	
 	public void send(byte[] data) {
 		try {
 			ds.send(new DatagramPacket(data,data.length));
-			System.out.println("sent data: " + new String(data));
+			Logger.writeMessage("sent data: " + new String(data), this.getClass());
 		} catch (IOException e) {
-			e.printStackTrace();
+			Logger.writeException(e, this.getClass());
 		}
 	}
-
+	public void start(){
+		try 
+		{
+			ia = InetAddress.getByName(REMOTE_ADDR);
+			ds.connect(new InetSocketAddress(ia,REMOTE_PORT));
+			(new Thread(this)).start();
+			Logger.writeMessage("connected to server at: " + REMOTE_ADDR + ":" + REMOTE_PORT, this.getClass());
+			
+		} 
+		catch (SocketException e) 
+		{
+			Logger.writeException(e, this.getClass());
+			return;
+		} 
+		catch (UnknownHostException e2) 
+		{
+			Logger.writeException(e2, this.getClass());
+			return;
+		}
+	}
+	
+	
 	public void close(){
+		open = false;
 		ds.close();
 	}
 	

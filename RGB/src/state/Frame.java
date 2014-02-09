@@ -1,10 +1,10 @@
 package state;
 
-import player.InputController;
 import graphics.GraphicsController;
 import graphics.Sprite;
 import main.Application;
 import main.Command;
+import main.InputController;
 
 public class Frame implements State {
 	private Sprite sprite;
@@ -24,6 +24,7 @@ public class Frame implements State {
 		currTime = System.currentTimeMillis();
 		if(currTime - startTime > delta){
 			Application.changeState(nextState);
+			nextState.start();
 		}
 	}
 
@@ -40,6 +41,10 @@ public class Frame implements State {
 		sprite = new Sprite(name,0,0);
 		this.delta = time;
 		this.nextState = nextState;
+	}
+
+	@Override
+	public void start() {
 		startTime = System.currentTimeMillis();
 	}
 

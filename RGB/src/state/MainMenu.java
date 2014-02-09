@@ -1,19 +1,27 @@
 package state;
 
 import graphics.GraphicsController;
+import graphics.Sprite;
+import gui.GuiListener;
+import gui.GuiObject;
+import gui.Option;
+import gui.Selector;
 
 import java.io.IOException;
 import java.net.*;
+import java.util.ArrayList;
 
-import player.InputController;
 import net.NetConnection;
 import net.NetworkManager;
 import main.Application;
 import main.Command;
+import main.InputController;
+import main.Logger;
 
-public class MainMenu implements State {
+public class MainMenu implements State, GuiListener {
 	
-	private NetConnection conn;
+	private ArrayList<GuiObject> gui;
+	private Selector selector;
 	private NetworkManager networkManager;
 	
 	private static final int refreshRate = 5000;
@@ -22,53 +30,53 @@ public class MainMenu implements State {
 	
 	@Override
 	public void render(GraphicsController gc) {
-		//if(conn.getPlayers(0)){ gc.render(0, 0, "splash04"); }else{ gc.render(0, 0, "splash01"); };
-		//if(conn.getPlayers(0)){ gc.render(0, 0, "splash05"); }else{ gc.render(0, 0, "splash02"); };
-		//if(conn.getPlayers(0)){ gc.render(0, 0, "splash06"); }else{ gc.render(0, 0, "splash03"); };
+		for(GuiObject object : gui){
+			gc.render(object.getX(), object.getY(), object.getSprite());
+		}
 	}
 
 	@Override
-	public void update() {
-		//Application.changeState(new Game(conn));
-		/*
-		long currTime = System.currentTimeMillis();
-		
-		if((currTime - lastRefresh) > refreshRate){
-			lastRefresh = currTime;
-			try {
-				ds.send(signal);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		
-		if(conn.getPlayers(0) && conn.getPlayers(1) && conn.getPlayers(2)){
-			Application.changeState(new Frame("PlayersConnected",5000,new Game(ds)));
-		}
-		*/
-		
-		
-	}
+	public void update() {}
 
 	@Override
 	public void getInput(InputController ic) {
+		/*
 		if(ic.getJump()){
 			networkManager.ping();
 		}
+		*/
+		selector.getInput(ic);
 	}
 	
 	public MainMenu(){
-		System.out.println("starting main menu");
-		
-		lastRefresh = System.currentTimeMillis();
-		
-		//create connection to server
 		networkManager = new NetworkManager();	
-		networkManager.start();
-		
+		gui = new ArrayList<GuiObject>();
 	}    
 	
 	public void close(){
 		networkManager.close();
+	}
+
+	@Override
+	public void start() {
+		Logger.writeMessage("Starting main menu", this.getClass());
+
+		Option play = new Option(320,320,new Sprite("/textures/play_option",0,0));
+		Option connect = new Option(320,480,new Sprite("/textures/connect_option",0,0));
+		selector = new Selector(play);
+		
+		selector.addOption(connect);
+		
+		play.addGuiListener(this);
+		connect.addGuiListener(networkManager);
+		
+		gui.add(play);
+		gui.add(connect);
+		gui.add(selector);
+	}
+
+	@Override
+	public void guiRespond() {
+		Application.changeState(new Game(networkManager));
 	}
 }

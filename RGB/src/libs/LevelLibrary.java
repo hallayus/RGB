@@ -9,7 +9,6 @@ import java.util.HashMap;
 
 import javax.imageio.ImageIO;
 
-import player.Player;
 import main.Application;
 import main.Logger;
 import world.Air;
@@ -46,7 +45,7 @@ public class LevelLibrary {
     		}
 		    
 		} catch (IOException e) {
-			Logger.write(e.getMessage(), LevelLibrary.class);
+			Logger.writeException(e, LevelLibrary.class);
 			e.printStackTrace();
 			Application.close();
 		}
@@ -70,7 +69,7 @@ public class LevelLibrary {
 		if(objectMap.containsKey(key)){
 			return objectMap.get(key);
 		}
-		Logger.write("error loading level, unrecognised pixel colour: " + key, LevelLibrary.class);
+		Logger.writeMessage("error loading level, unrecognised pixel colour: " + key, LevelLibrary.class);
 		return null;
 	}
 }
