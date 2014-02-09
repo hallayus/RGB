@@ -69,6 +69,7 @@ public class MainMenu implements State, GuiListener {
 		
 		play.addGuiListener(this);
 		connect.addGuiListener(networkManager);
+		connect.addGuiListener(this);
 		
 		gui.add(play);
 		gui.add(connect);

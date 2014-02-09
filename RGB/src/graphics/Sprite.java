@@ -48,13 +48,13 @@ public class Sprite {
 	
 	public int getWidth(){
 		if(texture != null)
-			return texture.getImageWidth();
+			return texture.getTextureWidth();
 		return 0;
 	}
 	
 	public int getHeight(){
 		if(texture != null)
-			return texture.getImageHeight();
+			return texture.getTextureHeight();
 		return 0;
 	}
 }

@@ -17,9 +17,13 @@ public class Selector extends GuiObject{
 	private int currOption;
 	
 	public Selector(Option firstOption){
-		super(firstOption.getX() - SIZE - OFFSET,firstOption.getY(),new Sprite("textures/selector_red",0,0));
+		super(-SIZE,-SIZE,new Sprite("textures/selector_red",0,0));
 		options = new ArrayList<Option>();
 		options.add(firstOption);
+		
+		currOption = 0;
+		
+		update();
 	}
 	
 	public void addOption(Option option){
@@ -66,7 +70,11 @@ public class Selector extends GuiObject{
 		Logger.writeMessage("current menu option: " + currOption, this.getClass());
 		GuiObject option = options.get(currOption);
 		Sprite optionSprite = option.getSprite();
+		int optionHeight = optionSprite.getHeight();
+		
+		
+		
 		this.x = option.getX() - SIZE - OFFSET;
-		this.y = option.getY();
+		this.y = (option.getY() + ((optionHeight - SIZE)/2));
 	}
 }

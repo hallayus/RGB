@@ -8,12 +8,12 @@ import java.net.InetSocketAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Stack;
 
 import main.Logger;
 
 public class NetConnection implements Runnable {
 	private boolean open = true;
-	private ArrayList<NetListener> listeners;
 	
 	private static final String REMOTE_ADDR = "localhost";
 	private static final int REMOTE_PORT = 8765;
@@ -21,8 +21,8 @@ public class NetConnection implements Runnable {
 	private DatagramSocket ds;
 	private DatagramPacket dp;
 	private byte[] data;
-	
-	private static InetAddress ia;
+
+	private Stack<DatagramPacket> packets;
 	
 	public void run() {
 		data = new byte[1024];
@@ -31,27 +31,24 @@ public class NetConnection implements Runnable {
 		
 		while(open){	
 			try {
-				ds.receive(dp);
-				data = dp.getData();
+				data = new byte[1024];
+				dp = new DatagramPacket(data, 1024);
 				
-				updateListeners(data);
+				ds.receive(dp);
+				
+				packets.push(dp);
+				
 			} catch (IOException e) {
 				Logger.writeException(e, this.getClass());
 				return;
 			}	
-		}	
-		
+		}		
 	}
 	
-	public NetConnection(){
-		
-		listeners = new ArrayList<NetListener>();
-		try {
-			ds = new DatagramSocket();
-		} catch (SocketException e) {
-			Logger.writeException(e, this.getClass());
-		}
-		
+	public byte[] receive()
+	{
+		DatagramPacket packet = packets.pop();
+		return packet.getData();
 	}
 	
 	public void send(byte[] data) {
@@ -62,11 +59,13 @@ public class NetConnection implements Runnable {
 			Logger.writeException(e, this.getClass());
 		}
 	}
+	
 	public void start(){
 		try 
 		{
-			ia = InetAddress.getByName(REMOTE_ADDR);
-			ds.connect(new InetSocketAddress(ia,REMOTE_PORT));
+			
+			ds.connect(new InetSocketAddress(InetAddress.getByName(REMOTE_ADDR),REMOTE_PORT));
+			
 			(new Thread(this)).start();
 			Logger.writeMessage("connected to server at: " + REMOTE_ADDR + ":" + REMOTE_PORT, this.getClass());
 			
@@ -89,13 +88,13 @@ public class NetConnection implements Runnable {
 		ds.close();
 	}
 	
-	public void addNetListener(NetListener listener){
-		listeners.add(listener);
-	}
-	
-	private void updateListeners(byte[] data){
-		for(NetListener listener : listeners){
-			listener.netUpdate(data);
+	public NetConnection(){
+		packets = new Stack<DatagramPacket>();
+		try {
+			ds = new DatagramSocket();
+		} catch (SocketException e) {
+			Logger.writeException(e, this.getClass());
 		}
+		
 	}
 }
