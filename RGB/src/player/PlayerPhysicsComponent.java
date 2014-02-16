@@ -3,10 +3,11 @@ package player;
 import java.awt.Rectangle;
 
 import world.GameObject;
+import world.PhysicsInterface;
 import main.Logger;
-import math.Vector2;
+import math.Vec2;
 
-public class PlayerPhysicsComponent {
+public class PlayerPhysicsComponent extends GameComponent {
 	private float vx = 0, vy = 0; //player velocity
 	private boolean grounded = false;
 	
@@ -14,22 +15,28 @@ public class PlayerPhysicsComponent {
 	private long currTime;
 	private float deltaTime;
 	
+	private Rectangle hitbox;
 	
 	private Player player;
 	private GameObject[][] world;
 	
 	private static final float MAX_X_SPEED = 32f;
 	private static final float MAX_Y_SPEED = 32f;
-	private final int BLOCK_SIZE;
+	private final int BLOCK_SIZE = 64;
 	private final float GRAVITY = 0.003f;
 	
-	public PlayerPhysicsComponent(GameObject[][] world,final int blockSize,Player player){
-		this.player = player;
-		this.world = world;
-		BLOCK_SIZE = blockSize;
-		
+	private final float JUMP_BOOST = -1f;
+	private final float WALK_SPEED = 0.2f;
+	
+	public PlayerPhysicsComponent(int x, int y){
+		hitbox = new Rectangle(x,y,BLOCK_SIZE,BLOCK_SIZE);
+
 		lastTime = System.currentTimeMillis();
 		currTime = lastTime;
+	}
+	
+	public Rectangle getHitBox(){
+		return hitbox;
 	}
 	
 	private void impulse(float x, float y){
@@ -55,8 +62,6 @@ public class PlayerPhysicsComponent {
 		currTime = System.currentTimeMillis();
 		deltaTime = (float) ((currTime - lastTime));
 		
-		float startVx;
-		
 		//System.out.println(deltaTime);
 		
 		impulse(0,GRAVITY);
@@ -67,79 +72,75 @@ public class PlayerPhysicsComponent {
 			
 			//System.out.println(dx + " " + dy);
 			
-			player.translate((int)dx,(int)dy);
+			hitbox.x += dx;
+			hitbox.y += dy;
 		}
-		checkCollisions();
 		lastTime = currTime;
 	}
 	
-	public void jump(float impulse){
+	public void jump(){
 
 		if(grounded){
 			Logger.writeMessage("player jumped", this.getClass());
-			vy = impulse;
+			vy = JUMP_BOOST;
 			grounded = false;
 		}
 	}
 	
-	public void left(float speed){
-		vx = -speed;
+	public void left(){
+		vx = -WALK_SPEED;
 	}
 	
-	public void right(float speed){
-		vx = speed;
+	public void right(){
+		vx = WALK_SPEED;
 	}
 	
 	public void still(){
 		vx = 0;
 	}
 	
-	private void checkCollisions(){
-
-		int a = (int) Math.floor(player.getCenterX() / BLOCK_SIZE);
-		int b = (int) Math.floor(player.getCenterY() / BLOCK_SIZE);
-		
-		int dx = 0;
-		int dy = 0;
-		
-		for(int i = a - 1; i <= a + 1;i++){
-			for(int j = b - 1; j <= b + 1;j++){ 
-				
-				if(i >= 0 && j >= 0 && i < world.length && j < world[0].length){
-					GameObject go = world[ i ][ j ];
-					
-					if(go.isSolid() && go.intersects(player)){
-						Rectangle r = player.intersection(go);
-						
-						if(r.getWidth() >= r.getHeight()){
-							if(player.getCenterY() >= go.getCenterY()){
-								dy = (int) r.getHeight();
-								//System.out.println("collided above");
-							}else{
-								dy = (int) (-r.getHeight());
-								grounded = true;
-								//System.out.println("collided below");
-							}
-							player.translate(0,dy);
-							vy = 0; //change to bouncy
-						}else{
-							dx = (int) ((player.getCenterX() >= go.getCenterX())?r.getWidth():(-r.getWidth()));
-							
-							player.translate((int) dx,0);
-							vx = 0; //change to bouncy
-						}
-						
-						
-					}
-				}
-				
-			}
-		}
-		
-	}
-	
 	public void reset(){
 		vx = 0;
 		vy = 0;
+	}
+
+	public int getX(){
+		return (int) hitbox.getX();
+	}
+	
+	public int getY(){
+		return (int) hitbox.getY();
+	}
+	
+	public void resolveCollisions(PhysicsInterface physicsInterface){
+		Rectangle objectHitbox = physicsInterface.getHitbox();
+				
+		int dy = 0, dx = 0;
+		if(hitbox.intersects(objectHitbox))
+		{
+			Rectangle r = hitbox.intersection(objectHitbox);
+			if(r.getWidth() >= r.getHeight())
+			{
+				if(hitbox.getCenterY() >= objectHitbox.getCenterY())
+				{
+					dy = (int) r.getHeight();
+				}
+				else
+				{
+					dy = (int) (-r.getHeight());
+					grounded = true;
+				}
+				
+				vy = 0; //change to bouncy
+			}
+			else
+			{
+				dx = (int) ((hitbox.getCenterX() >= objectHitbox.getCenterX())?r.getWidth():(-r.getWidth()));
+				
+				
+				vx = 0; //change to bouncy
+			}
+			hitbox.translate(dx, dy);
+		}
 	}
 }

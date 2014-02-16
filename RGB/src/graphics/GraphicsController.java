@@ -5,12 +5,9 @@ import org.newdawn.slick.opengl.Texture;
 
 
 public class GraphicsController {
-	//private GraphicsLibrary lib;
 	
-	public GraphicsController(){
-		//lib = new GraphicsLibrary();
-	}
-
+	private int cameraX = 0;
+	private int cameraY = 0;
 
 	public void render(int i, int j, Sprite sprite) {
 		//Texture t = lib.get("textures/block-grey");
@@ -25,18 +22,23 @@ public class GraphicsController {
 				
 				GL11.glBegin(GL11.GL_QUADS);
 					GL11.glTexCoord2f(0,0);
-					GL11.glVertex2f(i - xOffset,j - yOffset);
+					GL11.glVertex2f(i - xOffset - cameraX,j - yOffset - cameraY);
 					
 					GL11.glTexCoord2f(1,0);
-					GL11.glVertex2f(i + t.getTextureWidth() - xOffset,j - yOffset);
+					GL11.glVertex2f(i + t.getTextureWidth() - xOffset - cameraX,j - yOffset - cameraY);
 					
 					GL11.glTexCoord2f(1,1);
-					GL11.glVertex2f(i + t.getTextureWidth() - xOffset,j + t.getTextureHeight() - yOffset);
+					GL11.glVertex2f(i + t.getTextureWidth() - xOffset - cameraX,j + t.getTextureHeight() - yOffset - cameraY);
 					
 					GL11.glTexCoord2f(0,1);
-					GL11.glVertex2f(i - xOffset,j + t.getTextureHeight() - yOffset);
+					GL11.glVertex2f(i - xOffset - cameraX,j + t.getTextureHeight() - yOffset - cameraY);
 				GL11.glEnd();
 			}
 		}
+	}
+	
+	public void setCameraPosition(int x, int y){
+		cameraX = x;
+		cameraY = y;
 	}
 }

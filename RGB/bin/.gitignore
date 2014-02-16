@@ -1,10 +1,6 @@
-/controller
-/graphics
 /libs
-/main
-/math
-/net
+/world
 /player
 /state
-/world
-/gui
+/main
+/graphics

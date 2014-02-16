@@ -1,9 +1,9 @@
 package math;
 
-public class Vector2 {
+public class Vec2 {
 	private float x, y;
 	
-	public Vector2(float x, float y){
+	public Vec2(float x, float y){
 		this.x = x;
 		this.y = y;
 	}
@@ -16,7 +16,7 @@ public class Vector2 {
 		return this.y;
 	}
 	
-	public void add(Vector2 operand){
+	public void add(Vec2 operand){
 		this.x += operand.getX();
 		this.y += operand.getY();
 	}
@@ -34,7 +34,7 @@ public class Vector2 {
 		this.y = y;
 	}
 	
-	public void set(Vector2 setter){
+	public void set(Vec2 setter){
 		setter.setX(x);
 		setter.setY(y);
 	}

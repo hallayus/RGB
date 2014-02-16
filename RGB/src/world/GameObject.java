@@ -1,26 +1,29 @@
 package world;
 
+import graphics.GraphicsController;
 import graphics.Sprite;
 
 import java.awt.Rectangle;
+import java.util.ArrayList;
 
-public abstract class GameObject extends Rectangle {
+import player.GameComponent;
 
-	public static int BLOCK_SIZE = 64;
-	protected Sprite sprite;
-	protected Sprite tmpSpr;
+public abstract class GameObject {
+
+	protected int x, y;
+	protected ArrayList<GameObject> children;
+	protected ArrayList<GameComponent> components;
 	
-	public abstract GameObject clone(int x, int y);
-	
-	public Sprite getSprite(){
-		return this.sprite;
+	public GameObject(){
+		children = new ArrayList<GameObject>();
+		components = new ArrayList<GameComponent>();
 	}
 	
-	public GameObject(Sprite sprite){
-		this.sprite = sprite;
-		setSize(BLOCK_SIZE,BLOCK_SIZE); //call superclass and define the size of gameobjects
+	public void render(GraphicsController gc){
+		for(GameObject child : children){
+			child.render(gc);
+		}
 	}
 	
-	public abstract boolean isSolid();
-	
+	public abstract void update();
 }

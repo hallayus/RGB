@@ -1,42 +1,40 @@
 package player;
 
+import java.awt.Rectangle;
+
+import graphics.GraphicsController;
 import graphics.Sprite;
 import main.InputController;
-import math.Vector2;
 import world.GameObject;
+import world.PhysicsInterface;
 
-public class Player extends GameObject {
-	private PlayerPhysicsComponent physics;
+public class Player extends GameObject implements PhysicsInterface {
+	private PlayerPhysicsComponent physicsComponent;
 	private int startX, startY;
+	
+	private static final int SIZE = 64;
 	
 	private PlayerDirection direction;
 	private Sprite playerLeft;
 	private Sprite playerRight;
 	
-	private  GameObject[][] world;
-	
-	private final float jumpBoost = -1f;
-	private final float walkSpeed = 0.2f;
-	
-	@Override
-	public GameObject clone(int i, int j) {
-		return new Player(i,j,world);
-	}
 
 	@Override
-	public Sprite getSprite() {
+	public void render(GraphicsController gc) {
 		switch(direction){
 			case LEFT:
-				return playerLeft;
+				gc.render(x, y, playerLeft);
+				break;
 			case RIGHT:
-				return playerRight;
+				gc.render(x, y, playerRight);
+				break;
 			default:
-				return playerLeft;
+				gc.render(x, y, playerLeft);
 		}
 	}
 	
-	public Player(int x, int y, GameObject[][] world){
-		super(null); //isSolid set to true
+	public Player(int x, int y){
+
 		this.x = x;
 		this.y = y;
 		this.startX = x;
@@ -46,39 +44,53 @@ public class Player extends GameObject {
 		
 		playerLeft = new Sprite("textures/player_red_left",64,0);
 		playerRight = new Sprite("textures/player_red_right",0,0);
-		
-		this.world = world;
-		physics = new PlayerPhysicsComponent(world,BLOCK_SIZE,this);
+
+		physicsComponent = new PlayerPhysicsComponent(x,y);
 	}
 	
 	public void getInput(InputController ic){
-		physics.still();
+		physicsComponent.still();
 		
-		if(ic.getJump()) physics.jump(jumpBoost);
+		if(ic.getJump()) physicsComponent.jump();
 		
 		
 		if(ic.getLeft()){
-			physics.left(walkSpeed); 
+			physicsComponent.left(); 
 			direction = PlayerDirection.LEFT;
 		}
 		if(ic.getRight()){
-			physics.right(walkSpeed); 
+			physicsComponent.right(); 
 			direction = PlayerDirection.RIGHT;
 		}
 	}
 	
 	public void update(){
-		physics.update();
-		if(y > world[0].length * BLOCK_SIZE)
+		physicsComponent.update();
+		x = physicsComponent.getX();
+		y = physicsComponent.getY();
+		
+		if(y > 1800) //hack until node based system
 		{
 			x = startX;
 			y = startY;
-		}
-		//if(physics.isGrounded) physics.impulse(0,gravity);
+		}		
 	}
 
 	@Override
-	public boolean isSolid() {
-		return false;
+	public boolean resolveCollisions(PhysicsInterface physicsInterface) 
+	{
+		if(physicsInterface.resolveCollisions(this))
+		{
+		physicsComponent.resolveCollisions(physicsInterface);
+		x = physicsComponent.getX();
+		y = physicsComponent.getY();
+		}
+		return true;
+
+	}
+
+	@Override
+	public Rectangle getHitbox() {
+		return physicsComponent.getHitBox();
 	}
 }
