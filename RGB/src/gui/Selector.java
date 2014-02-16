@@ -2,10 +2,12 @@ package gui;
 
 import java.util.ArrayList;
 
+import org.newdawn.slick.opengl.Texture;
+
 import main.InputController;
 import main.Logger;
 import graphics.GraphicsController;
-import graphics.Sprite;
+import graphics.StillSprite;
 
 public class Selector extends GuiObject{
 	private static final int OFFSET = 8;
@@ -17,7 +19,7 @@ public class Selector extends GuiObject{
 	private int currOption;
 	
 	public Selector(Option firstOption){
-		super(-SIZE,-SIZE,new Sprite("textures/selector_red",0,0));
+		super(-SIZE,-SIZE,new StillSprite("selector_red",0,0));
 		options = new ArrayList<Option>();
 		options.add(firstOption);
 		
@@ -68,11 +70,15 @@ public class Selector extends GuiObject{
 	
 	private void update(){
 		Logger.writeMessage("current menu option: " + currOption, this.getClass());
+		
 		GuiObject option = options.get(currOption);
-		Sprite optionSprite = option.getSprite();
-		int optionHeight = optionSprite.getHeight();
+		StillSprite optionSprite = option.getSprite();
+		
+		Texture optionTexture = optionSprite.getTexture();
 		
 		
+		int optionHeight = 0;
+		if(optionTexture != null) optionHeight = optionTexture.getTextureHeight();
 		
 		this.x = option.getX() - SIZE - OFFSET;
 		this.y = (option.getY() + ((optionHeight - SIZE)/2));

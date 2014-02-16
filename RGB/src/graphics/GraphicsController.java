@@ -15,7 +15,6 @@ public class GraphicsController {
 			Texture t = sprite.getTexture();
 			if(t != null){
 				t.bind();
-				if(sprite.getName() == "textures/player_-03") GL11.glColor3f(0.5f,0.5f,1.0f);
 				
 				int xOffset = sprite.getX();
 				int yOffset = sprite.getY();

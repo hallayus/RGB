@@ -1,13 +1,14 @@
 package state;
 
+import graphics.FrameSprite;
 import graphics.GraphicsController;
-import graphics.Sprite;
+import graphics.StillSprite;
 import main.Application;
 import main.Command;
 import main.InputController;
 
 public class Frame implements State {
-	private Sprite sprite;
+	private FrameSprite sprite;
 	private long delta;
 	private long startTime;
 	private long currTime;
@@ -38,7 +39,7 @@ public class Frame implements State {
 	}
 	
 	public Frame(String name,long time,State nextState){
-		sprite = new Sprite(name,0,0);
+		sprite = new FrameSprite(name);
 		this.delta = time;
 		this.nextState = nextState;
 	}

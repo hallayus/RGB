@@ -3,8 +3,9 @@ package player;
 import java.awt.Rectangle;
 
 import graphics.GraphicsController;
-import graphics.Sprite;
+import graphics.StillSprite;
 import main.InputController;
+import math.PlayerPhysicsComponent;
 import world.GameObject;
 import world.PhysicsInterface;
 
@@ -15,8 +16,8 @@ public class Player extends GameObject implements PhysicsInterface {
 	private static final int SIZE = 64;
 	
 	private PlayerDirection direction;
-	private Sprite playerLeft;
-	private Sprite playerRight;
+	private StillSprite playerLeft;
+	private StillSprite playerRight;
 	
 
 	@Override
@@ -42,8 +43,8 @@ public class Player extends GameObject implements PhysicsInterface {
 		
 		direction = PlayerDirection.LEFT;
 		
-		playerLeft = new Sprite("textures/player_red_left",64,0);
-		playerRight = new Sprite("textures/player_red_right",0,0);
+		playerLeft = new StillSprite("player_red_left",64,0);
+		playerRight = new StillSprite("player_red_right",0,0);
 
 		physicsComponent = new PlayerPhysicsComponent(x,y);
 	}

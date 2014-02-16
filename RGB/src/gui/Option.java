@@ -1,13 +1,13 @@
 package gui;
 
 import java.util.ArrayList;
-import graphics.Sprite;
+import graphics.StillSprite;
 
 public class Option extends GuiObject {
 	private ArrayList<GuiListener> listeners;
 	
 	
-	public Option(int x, int y, Sprite sprite) {
+	public Option(int x, int y, StillSprite sprite) {
 		super(x, y, sprite);
 		listeners = new ArrayList<GuiListener>();
 	}

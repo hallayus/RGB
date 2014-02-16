@@ -7,54 +7,34 @@ import main.Logger;
 
 import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureLoader;
+import org.newdawn.slick.util.ResourceLoader;
 
-public class Sprite {
-	private Texture texture;
-	private String name;
-	private int x, y; //coordinate to start drawing.
+public abstract class Sprite {
 	
-	private void load(String name){
+	protected Texture texture;
+	protected int x, y; //coordinate to start drawing. 
+	
+	private Texture load(String name){
+		Texture texture = null;
 		try {
-			InputStream in = org.newdawn.slick.util.ResourceLoader.getResourceAsStream("res/" + name + ".png");
+			InputStream in = ResourceLoader.getResourceAsStream("res/" + name + ".png");
 			texture = TextureLoader.getTexture("PNG", in);
 			Logger.writeMessage("Sprite " + name + " has dimensions: " + texture.getHeight() + ", " + texture.getWidth(),this.getClass());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Logger.writeException(e, this.getClass());
 		}
-		
-		if(texture == null){
-			System.out.println(name + " texture not loaded");
-		}
-		
+		return texture;
 	}
 	
 	public Sprite(String name, int xOffset, int yOffset){
-		load(name);
+		texture = load(name);
 		x = xOffset;
 		y = yOffset;
 	}
 	
-	public Texture getTexture(){
-		return this.texture;
-	}
-	
-	public String getName(){
-		return name;
-	}
+	public abstract Texture getTexture();
 	
 	public int getX(){ return x; }
 	public int getY(){ return y; }
-	
-	public int getWidth(){
-		if(texture != null)
-			return texture.getTextureWidth();
-		return 0;
-	}
-	
-	public int getHeight(){
-		if(texture != null)
-			return texture.getTextureHeight();
-		return 0;
-	}
+
 }

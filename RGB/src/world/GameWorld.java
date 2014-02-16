@@ -2,7 +2,6 @@ package world;
 
 import java.awt.Rectangle;
 
-import libs.LevelLoader;
 import math.Vec2;
 
 public class GameWorld extends GameObject implements PhysicsInterface {

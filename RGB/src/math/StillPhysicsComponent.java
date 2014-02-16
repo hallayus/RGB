@@ -1,6 +1,8 @@
-package player;
+package math;
 
 import java.awt.Rectangle;
+
+import main.GameComponent;
 
 public class StillPhysicsComponent extends GameComponent{
 	private Rectangle hitbox;

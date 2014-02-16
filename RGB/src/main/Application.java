@@ -25,7 +25,7 @@ public class Application{
 		GraphicsController gc = new GraphicsController();
 		InputController ic = new InputController();
 		
-		currState = new Frame("slides/Splash", 2000, new MainMenu());
+		currState = new Frame("Splash", 2000, new MainMenu());
 		currState.start();
 		
 		while(!Display.isCloseRequested()){

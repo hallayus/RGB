@@ -1,7 +1,7 @@
 package state;
 
 import graphics.GraphicsController;
-import graphics.Sprite;
+import graphics.StillSprite;
 import gui.GuiListener;
 import gui.GuiObject;
 import gui.Option;
@@ -61,8 +61,8 @@ public class MainMenu implements State, GuiListener {
 	public void start() {
 		Logger.writeMessage("Starting main menu", this.getClass());
 
-		Option play = new Option(320,320,new Sprite("/textures/play_option",0,0));
-		Option connect = new Option(320,480,new Sprite("/textures/connect_option",0,0));
+		Option play = new Option(320,320,new StillSprite("play_option",0,0));
+		Option connect = new Option(320,480,new StillSprite("connect_option",0,0));
 		selector = new Selector(play);
 		
 		selector.addOption(connect);

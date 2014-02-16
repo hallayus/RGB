@@ -1,12 +1,12 @@
 package world;
 
 import graphics.GraphicsController;
-import graphics.Sprite;
+import graphics.StillSprite;
 
 import java.awt.Rectangle;
 import java.util.ArrayList;
 
-import player.GameComponent;
+import main.GameComponent;
 
 public abstract class GameObject {
 

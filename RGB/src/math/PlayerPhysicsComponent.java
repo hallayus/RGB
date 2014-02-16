@@ -1,11 +1,12 @@
-package player;
+package math;
 
 import java.awt.Rectangle;
 
+import player.Player;
 import world.GameObject;
 import world.PhysicsInterface;
+import main.GameComponent;
 import main.Logger;
-import math.Vec2;
 
 public class PlayerPhysicsComponent extends GameComponent {
 	private float vx = 0, vy = 0; //player velocity

@@ -10,8 +10,8 @@ import net.NetConnection;
 import net.NetworkManager;
 import player.Player;
 import world.GameObject;
+import world.LevelLoader;
 import world.RootObject;
-import libs.LevelLoader;
 import main.Command;
 import main.InputController;
 

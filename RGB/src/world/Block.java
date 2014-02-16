@@ -2,13 +2,13 @@ package world;
 
 import java.awt.Rectangle;
 
-import player.StillPhysicsComponent;
+import math.StillPhysicsComponent;
 import graphics.GraphicsController;
-import graphics.Sprite;
+import graphics.StillSprite;
 
 public class Block extends GameObject implements PhysicsInterface {
 
-	private static Sprite sprite = new Sprite("textures/block-grey",0,0);
+	private static StillSprite sprite = new StillSprite("block-grey",0,0);
 	private StillPhysicsComponent physics;
 	
 	public Block(int x, int y) 

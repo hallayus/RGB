@@ -1,4 +1,4 @@
-package libs;
+package world;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -9,9 +9,6 @@ import javax.imageio.ImageIO;
 
 import main.Application;
 import main.Logger;
-import world.Block;
-import world.GameObject;
-import world.PhysicsInterface;
 
 public class LevelLoader {
 	private PhysicsInterface[][] level;

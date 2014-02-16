@@ -1,7 +1,7 @@
 package main;
 
 public class Logger {
-	private static final String[] blackList = {"player"};
+	private static final String[] blackList = {"player","math"};
 	
 	public static void writeMessage(String message, Class c)
 	{
